@@ -205,3 +205,44 @@ Eulerian Video Magnification (EVM) is a technique used to amplify subtle motion 
 - **Video Saving**: Finally, the frames are saved as a video using OpenCV's `cv2.VideoWriter()`.
 
 This step enhances subtle motions, such as vibrations or fluctuations, which are otherwise imperceptible, enabling better analysis and detection of machine defects.
+
+---
+
+## Step 5: Video Segmentation into Time Slices with Overlap
+
+This step involves splitting vibration videos into smaller time slices (segments) to allow detailed analysis of vibration patterns. Segments can either be non-overlapping or have a defined overlap between consecutive segments.
+
+### 1. Process Overview
+
+- **Segment Duration:** Each segment is defined by a fixed duration (e.g., 5, 10, or 15 seconds).
+- **Overlap Ratio:** An optional overlap between segments (e.g., 50%) to capture smoother transitions.
+- **Input Videos:** Videos from three categories (`Normal_state`, `Bearing_fault`, `Unbalance_weight`) with two views: `front_evm.avi` and `angle_evm.avi`.
+
+### 2. Segmentation Process
+
+1. **Read Video:** The video is loaded, and its total number of frames is determined.
+2. **Calculate Segments:** Segments are created based on the segment duration and overlap ratio. The step size between consecutive segments is adjusted for overlap.
+3. **Save Segments:** Each segment is saved as an individual video file with a name indicating segment number, duration, and overlap type.
+4. **Directory Organization:** Segments are organized by category and overlap type in directories like `segmented_5`, `segmented_10_overlap`, etc.
+
+### 3. Output Structure
+
+Segments are saved in structured directories for each category:
+
+- `segmented_5/`, `segmented_10/`, `segmented_15/` (non-overlapping)
+- `segmented_5_overlap/`, `segmented_10_overlap/`, `segmented_15_overlap/` (overlapping)
+
+Example output filenames:
+- `front_evm_segment_1_5s.avi`
+- `angle_evm_segment_1_10s_50_overlap.avi`
+
+### 4. Benefits of Segmentation
+
+- **Granular Analysis:** Breaks videos into smaller segments for more detailed analysis.
+- **Overlap Option:** Ensures smoother transitions between segments, preventing data loss at boundaries.
+- **Customizable:** Flexible segment durations and overlap ratios for tailored analysis.
+
+This step prepares the video data for the next stages of processing, ensuring that relevant features can be extracted from distinct time intervals.
+
+---
+
