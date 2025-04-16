@@ -31,6 +31,8 @@ The goal is to process these videos and use them to identify the type of defect 
     - One recorded from an **angled view** at a small angle.
 - **Format**: Each video captures a real-time machine operation, with **vibrations** visible as disturbances or oscillations on the machine's surface.
 
+---
+
 ## 🧹 Step 2: Video Preprocessing
 
 This step prepares your raw machine vibration videos for analysis by enhancing stability, isolating relevant areas, and improving visual clarity. Below are the key tasks performed:
@@ -105,6 +107,8 @@ This step prepares your raw machine vibration videos for analysis by enhancing s
 | Saved Cropped Frames  | Final processed frames ready for analysis    |
 | ROI Preview           | Visual check of correctness of region        |
 
+---
+
 ## Step3: Preprocessing and Video Generation
 
 ### Overview
@@ -162,3 +166,50 @@ These output videos have the same resolution and frame count, making them ready 
 - **Video Writing**: The `cv2.VideoWriter` class is used to write frames to output videos for each condition.
 
 This step standardizes the input videos by ensuring they have the same resolution and frame count, enabling further analysis or processing.
+
+---
+
+## Step 4: Eulerian Video Magnification (EVM)
+
+## Overview
+Eulerian Video Magnification (EVM) is a technique used to amplify subtle motion or changes in videos that are typically imperceptible to the human eye. In this step, we apply EVM to enhance the vibration patterns from the preprocessed synchronized videos. The process involves several key operations, including Laplacian pyramid construction, temporal bandpass filtering, amplification of the desired frequency range, and reconstruction of the modified video.
+
+## Workflow and Key Tasks
+
+### Step 1: Build Laplacian Pyramid for Each Frame
+- **Input**: The frames of the synchronized video (from Step 3).
+- **Action**: Each frame is transformed into a Laplacian pyramid, which decomposes the image into several levels, each representing different frequency details at various scales.
+- **Function Used**: `build_laplacian_pyramid(frame, levels)`.
+- **Output**: A list of pyramids, where each pyramid contains multiple levels for a frame.
+
+### Step 2: Convert Pyramid Level to Array
+- **Action**: Extract the middle level of the Laplacian pyramid for each frame to represent the primary frequency content of the image.
+- **Output**: An array of frames representing the middle level of the pyramid for each video frame.
+
+### Step 3: Temporal Bandpass Filtering
+- **Input**: The pyramid levels extracted from the frames.
+- **Action**: A temporal bandpass filter is applied to the pyramid frames. The filter is designed to isolate the specific frequencies related to the vibrations or motion of interest (between `freq_min` and `freq_max`).
+- **Function Used**: `temporal_bandpass_filter(frames, freq_min, freq_max, fps)`.
+- **Output**: The frames are filtered to retain only the desired frequencies.
+
+### Step 4: Amplification and Reconstruction
+- **Action**: The filtered frames are amplified to exaggerate the vibration or motion that corresponds to the target frequencies. The amplified frames are then added back to the Laplacian pyramid.
+- **Function Used**: `reconstruct_from_laplacian_pyramid(pyramid)`.
+- **Output**: A new set of frames with enhanced motion or vibrations, reconstructed from the modified Laplacian pyramids.
+
+### Step 5: Save the Enhanced Video
+- **Action**: The processed frames are converted back to BGR format and written to an output video file.
+- **Function Used**: `cv2.VideoWriter()` is used to create a video file.
+- **Output**: A video where the amplified vibrations or motion are clearly visible.
+
+## Output
+- The final output is a video where subtle vibrations or changes in the original video are amplified, making them more visible. The output video will be saved in the specified `output_path` in `.mp4` format.
+
+## Detailed Code Walkthrough
+- **Laplacian Pyramid Construction**: The `build_laplacian_pyramid()` function decomposes each frame into several levels, allowing us to isolate different frequency components.
+- **Temporal Bandpass Filtering**: The `temporal_bandpass_filter()` function is used to isolate the desired frequency range in the temporal domain, allowing us to focus on the vibrations that occur at specific frequencies.
+- **Amplification**: The amplified frames are created by applying a scaling factor to the filtered frames, making subtle motions more pronounced.
+- **Reconstruction**: The `reconstruct_from_laplacian_pyramid()` function reconstructs the modified frames by adding the amplified frequencies back to the Laplacian pyramid and then upscaling the pyramid levels.
+- **Video Saving**: Finally, the frames are saved as a video using OpenCV's `cv2.VideoWriter()`.
+
+This step enhances subtle motions, such as vibrations or fluctuations, which are otherwise imperceptible, enabling better analysis and detection of machine defects.
