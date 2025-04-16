@@ -245,4 +245,47 @@ Example output filenames:
 This step prepares the video data for the next stages of processing, ensuring that relevant features can be extracted from distinct time intervals.
 
 ---
+## Step 6: Frame-wise Feature Extraction
+
+In this step, we extract detailed features from each frame in the segmented videos. This allows us to analyze the dynamics of the vibration patterns over time, capturing more granular information about the behavior of the system.
+
+### 1. Process Overview
+
+- **Objective:** Extract specific features from each frame of the segmented videos.
+- **Features Extracted:** Optical flow, edge ratio, keypoints, and FFT peak values for every frame.
+- **Input Videos:** Segmented vibration videos (from Step 5) categorized into different states (`Bearing_fault`, `Normal_state`, `Unbalance_weight`), with each segment containing frames from the `front` and `angle` views.
+  
+### 2. Feature Extraction Details
+
+- **Optical Flow:** Calculates the mean and standard deviation of optical flow between consecutive frames using the Farneback method.
+- **Edge Ratio:** Measures the ratio of edge pixels (detected by the Canny edge detector) to the total number of pixels in the frame.
+- **Keypoints:** Counts the number of keypoints detected using the SIFT algorithm.
+- **FFT Peak:** Extracts the peak value from the Fast Fourier Transform (FFT) of each frame, providing a measure of frequency components.
+
+Each feature is calculated for every frame in the segmented videos, allowing for a detailed analysis of each time slice.
+
+### 3. Output Structure
+
+The extracted features are saved in CSV files for each state (e.g., `Bearing_fault_framewise_features.csv`). Each row in the CSV represents the features of a single frame, with the following columns:
+
+- `video_name`: Name of the video.
+- `frame_index`: Index of the frame in the segment.
+- `mean_flow`: Mean optical flow between consecutive frames.
+- `std_flow`: Standard deviation of optical flow.
+- `edge_ratio`: Ratio of edge pixels to total pixels.
+- `keypoint_count`: Number of keypoints detected.
+- `fft_peak`: Maximum FFT magnitude (peak).
+- `view`: The view (e.g., `front` or `angle`).
+- `state`: The condition of the system (e.g., `Bearing_fault`).
+
+
+### Benefits of Frame-wise Feature Extraction
+
+- **Detailed Temporal Analysis:** Allows fine-grained analysis of vibrations by extracting features for each frame, capturing the dynamics over time.
+- **Comprehensive Data Representation:** The frame-wise features can be used for training machine learning models (e.g., CNNs) to predict system states based on individual frames.
+- **Granular Insights:** Provides detailed insights into the behavior of the system, such as how optical flow, edges, and keypoints evolve within each segment.
+
+This step prepares the dataset for the next stage of model training or analysis, ensuring a comprehensive representation of the video data at the frame level.
+
+---
 
