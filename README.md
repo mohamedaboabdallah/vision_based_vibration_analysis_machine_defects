@@ -37,13 +37,11 @@ The goal is to process these videos and use them to identify the type of defect 
 
 This step prepares your raw machine vibration videos for analysis by enhancing stability, isolating relevant areas, and improving visual clarity. Below are the key tasks performed:
 
----
-
 ### 📥 1. **Video Loading**
 - Each video is loaded frame by frame using OpenCV (`cv2.VideoCapture`).
 - All frames are stored in a list for further processing.
 
----
+
 
 ### 🎯 2. **Video Stabilization**
 - Vibration videos may include small camera shakes. Stabilization reduces these to focus only on machine motion.
@@ -52,7 +50,6 @@ This step prepares your raw machine vibration videos for analysis by enhancing s
   - Applies cumulative transformations to keep the video steady.
 - Output: A stabilized list of frames aligned to the first frame.
 
----
 
 ### 🎬 3. **Motion-based ROI Detection**
 - The goal is to **automatically find the region of interest (ROI)** where meaningful machine motion occurs.
@@ -64,7 +61,6 @@ This step prepares your raw machine vibration videos for analysis by enhancing s
   - Compute bounding box around all detected motion areas.
 - Output: A bounding box `(x, y, w, h)` defining the active motion zone.
 
----
 
 ### 🔍 4. **ROI Preview**
 - A few sample frames are selected.
@@ -72,7 +68,6 @@ This step prepares your raw machine vibration videos for analysis by enhancing s
 - Frames are displayed using `matplotlib` to allow manual inspection.
 - This ensures the ROI detection step worked correctly.
 
----
 
 ### 🧮 5. **Histogram Equalization (Optional but Applied)**
 - Converts each frame to grayscale.
@@ -80,13 +75,10 @@ This step prepares your raw machine vibration videos for analysis by enhancing s
   - This brings out more detail in low-light or low-contrast regions.
 - Helps improve feature extraction and analysis later.
 
----
 
 ### ✂️ 6. **Cropping**
 - Using the ROI `(x, y, w, h)`, each equalized grayscale frame is cropped to isolate only the vibrating part of the machine.
 - This reduces noise from static parts of the scene.
-
----
 
 ### 💾 7. **Saving Preprocessed Frames**
 - All cropped grayscale frames are saved as `.png` images in the specified `output_dir`.
@@ -96,7 +88,7 @@ This step prepares your raw machine vibration videos for analysis by enhancing s
   - Deep learning models
   - Vibration pattern analysis
 
----
+
 
 ### ✅ Summary of Output
 | Output Item           | Description                                  |
