@@ -105,46 +105,60 @@ This step prepares your raw machine vibration videos for analysis by enhancing s
 | Saved Cropped Frames  | Final processed frames ready for analysis    |
 | ROI Preview           | Visual check of correctness of region        |
 
-## 🧩 Step 3: Frame Synchronization and Video Reconstruction
+## Step3: Preprocessing and Video Generation
 
-After preprocessing the six input videos and extracting their frames, the next step is to **synchronize the frame lengths** and **reconstruct each video** from its processed frames.
+### Overview
+In this step, we process and generate synchronized output videos from multiple pre-recorded video frames. These frames represent different machine states (e.g., Unbalanced Weight, Bearing Fault, Normal State), with each state having two types of views (front and angle). The goal is to ensure that all videos have the same number of frames and resolution before saving them as video files.
 
-### 🎯 Objective
+### Workflow and Key Tasks
 
-Ensure all videos have the same number of frames by trimming longer sequences, then convert these synchronized frame sequences back into video files for consistent analysis and further processing.
-
-### 🗂️ Input
-
-- 6 folders of preprocessed frames:
-  - `Bearing_fault/front`
-  - `Normal_state/front`
+### Step 1: Loading Preprocessed Frames
+- **Input**: The frames for each condition (Unbalanced Weight, Bearing Fault, Normal State) are stored in six separate folders: 
   - `Unbalance_weight/front`
-  - `Bearing_fault/angle`
-  - `Normal_state/angle`
   - `Unbalance_weight/angle`
+  - `Bearing_fault/front`
+  - `Bearing_fault/angle`
+  - `Normal_state/front`
+  - `Normal_state/angle`
+  
+- **Action**: Frames are loaded from each folder into a list for further processing.
 
-Each folder contains a sequence of preprocessed frames (images).
+### Step 2: Interpolation of Frames
+- **Problem**: Different videos may have varying lengths, resulting in a different number of frames.
+  
+- **Action**: To ensure all videos have the same number of frames, the frames are interpolated using the `interpolate_frames()` function. This function blends two consecutive frames to create intermediate frames. The number of frames in each video is adjusted to match the maximum frame count found across all videos.
 
-### ⚙️ Process
+- **Result**: Each video now contains the same number of frames.
 
-1. **Load frames** from each of the six folders.
-2. **Determine the minimum number of frames** across all sequences.
-3. **Trim all frame sequences** to this minimum length to ensure uniformity.
-4. **Reconstruct videos** from the trimmed frames using a fixed frame rate (e.g., 30 FPS).
-5. **Save output videos** with names that reflect their original folders.
+### Step 3: Resizing Frames to a Common Size
+- **Problem**: The videos may have different resolutions, causing inconsistency when combining them later.
 
-### 🧪 Why This Step is Important
+- **Action**: All frames are resized to a target resolution (based on the first video frame's size) using the `resize_frames_to_target_size()` function. This ensures that all videos have the same resolution.
 
-- Ensures that all videos are temporally aligned for consistent comparison.
-- Necessary before applying algorithms like **Eulerian Video Magnification (EVM)** which require consistent frame rates and counts.
-- Prepares clean and synchronized video input for defect classification or visualization.
+- **Result**: All frames now have the same resolution, making it possible to combine them into synchronized videos.
 
-### 💾 Output
+### Step 4: Video Writing
+- **Action**: Using OpenCV’s `cv2.VideoWriter`, a video file is created for each condition, and the resized frames are written to the corresponding video. This is done for each of the six conditions: 
+  - `Unbalance_weight/front`
+  - `Unbalance_weight/angle`
+  - `Bearing_fault/front`
+  - `Bearing_fault/angle`
+  - `Normal_state/front`
+  - `Normal_state/angle`
 
-- 6 synchronized video files:
-  - `Bearing_fault/front.mp4`
-  - `Normal_state/front.mp4`
-  - `Unbalance_weight/front.mp4`
-  - `Bearing_fault/angle..mp4`
-  - `Normal_state/angle.mp4`
-  - `Unbalance_weight/angle.mp4`
+- **Result**: Six synchronized videos are created and saved in the `merged_preprocessed_videos` directory.
+
+### Output
+- Six output videos are generated and saved in `.avi` or `.mp4` format, depending on the specified codec.
+- Each video corresponds to one of the six conditions: `Unbalance_weight/front`, `Unbalance_weight/angle`, `Bearing_fault/front`, `Bearing_fault/angle`, `Normal_state/front`, `Normal_state/angle`.
+
+These output videos have the same resolution and frame count, making them ready for further analysis or processing.
+
+### Detailed Code Walkthrough
+- **Loading Frames**: The `load_frames_from_folder()` function is used to load frames from each folder.
+- **Removing Duplicate Frames**: The `remove_duplicate_frames()` function ensures no duplicate frames are included by comparing consecutive frames.
+- **Interpolation**: The `interpolate_frames()` function handles frame duplication or interpolation to ensure all videos have the same number of frames.
+- **Resizing**: The `resize_frames_to_target_size()` function resizes all frames to a common resolution.
+- **Video Writing**: The `cv2.VideoWriter` class is used to write frames to output videos for each condition.
+
+This step standardizes the input videos by ensuring they have the same resolution and frame count, enabling further analysis or processing.
