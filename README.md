@@ -104,3 +104,47 @@ This step prepares your raw machine vibration videos for analysis by enhancing s
 | Equalized Grayscale   | Contrast-enhanced version of the ROI         |
 | Saved Cropped Frames  | Final processed frames ready for analysis    |
 | ROI Preview           | Visual check of correctness of region        |
+
+## 🧩 Step 3: Frame Synchronization and Video Reconstruction
+
+After preprocessing the six input videos and extracting their frames, the next step is to **synchronize the frame lengths** and **reconstruct each video** from its processed frames.
+
+### 🎯 Objective
+
+Ensure all videos have the same number of frames by trimming longer sequences, then convert these synchronized frame sequences back into video files for consistent analysis and further processing.
+
+### 🗂️ Input
+
+- 6 folders of preprocessed frames:
+  - `Bearing_fault/front`
+  - `Normal_state/front`
+  - `Unbalance_weight/front`
+  - `Bearing_fault/angle`
+  - `Normal_state/angle`
+  - `Unbalance_weight/angle`
+
+Each folder contains a sequence of preprocessed frames (images).
+
+### ⚙️ Process
+
+1. **Load frames** from each of the six folders.
+2. **Determine the minimum number of frames** across all sequences.
+3. **Trim all frame sequences** to this minimum length to ensure uniformity.
+4. **Reconstruct videos** from the trimmed frames using a fixed frame rate (e.g., 30 FPS).
+5. **Save output videos** with names that reflect their original folders.
+
+### 🧪 Why This Step is Important
+
+- Ensures that all videos are temporally aligned for consistent comparison.
+- Necessary before applying algorithms like **Eulerian Video Magnification (EVM)** which require consistent frame rates and counts.
+- Prepares clean and synchronized video input for defect classification or visualization.
+
+### 💾 Output
+
+- 6 synchronized video files:
+  - `Bearing_fault/front.mp4`
+  - `Normal_state/front.mp4`
+  - `Unbalance_weight/front.mp4`
+  - `Bearing_fault/angle..mp4`
+  - `Normal_state/angle.mp4`
+  - `Unbalance_weight/angle.mp4`
