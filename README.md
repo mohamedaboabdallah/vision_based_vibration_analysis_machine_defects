@@ -205,3 +205,87 @@ Eulerian Video Magnification (EVM) is a technique used to amplify subtle motion 
 - **Video Saving**: Finally, the frames are saved as a video using OpenCV's `cv2.VideoWriter()`.
 
 This step enhances subtle motions, such as vibrations or fluctuations, which are otherwise imperceptible, enabling better analysis and detection of machine defects.
+
+---
+
+## Step 5: Video Segmentation into Time Slices with Overlap
+
+This step involves splitting vibration videos into smaller time slices (segments) to allow detailed analysis of vibration patterns. Segments can either be non-overlapping or have a defined overlap between consecutive segments.
+
+### 1. Process Overview
+
+- **Segment Duration:** Each segment is defined by a fixed duration (e.g., 5, 10, or 15 seconds).
+- **Overlap Ratio:** An optional overlap between segments (e.g., 50%) to capture smoother transitions.
+- **Input Videos:** Videos from three categories (`Normal_state`, `Bearing_fault`, `Unbalance_weight`) with two views: `front_evm.avi` and `angle_evm.avi`.
+
+### 2. Segmentation Process
+
+1. **Read Video:** The video is loaded, and its total number of frames is determined.
+2. **Calculate Segments:** Segments are created based on the segment duration and overlap ratio. The step size between consecutive segments is adjusted for overlap.
+3. **Save Segments:** Each segment is saved as an individual video file with a name indicating segment number, duration, and overlap type.
+4. **Directory Organization:** Segments are organized by category and overlap type in directories like `segmented_5`, `segmented_10_overlap`, etc.
+
+### 3. Output Structure
+
+Segments are saved in structured directories for each category:
+
+- `segmented_5/`, `segmented_10/`, `segmented_15/` (non-overlapping)
+- `segmented_5_overlap/`, `segmented_10_overlap/`, `segmented_15_overlap/` (overlapping)
+
+Example output filenames:
+- `front_evm_segment_1_5s.avi`
+- `angle_evm_segment_1_10s_50_overlap.avi`
+
+### 4. Benefits of Segmentation
+
+- **Granular Analysis:** Breaks videos into smaller segments for more detailed analysis.
+- **Overlap Option:** Ensures smoother transitions between segments, preventing data loss at boundaries.
+- **Customizable:** Flexible segment durations and overlap ratios for tailored analysis.
+
+This step prepares the video data for the next stages of processing, ensuring that relevant features can be extracted from distinct time intervals.
+
+---
+## Step 6: Frame-wise Feature Extraction
+
+In this step, we extract detailed features from each frame in the segmented videos. This allows us to analyze the dynamics of the vibration patterns over time, capturing more granular information about the behavior of the system.
+
+### 1. Process Overview
+
+- **Objective:** Extract specific features from each frame of the segmented videos.
+- **Features Extracted:** Optical flow, edge ratio, keypoints, and FFT peak values for every frame.
+- **Input Videos:** Segmented vibration videos (from Step 5) categorized into different states (`Bearing_fault`, `Normal_state`, `Unbalance_weight`), with each segment containing frames from the `front` and `angle` views.
+  
+### 2. Feature Extraction Details
+
+- **Optical Flow:** Calculates the mean and standard deviation of optical flow between consecutive frames using the Farneback method.
+- **Edge Ratio:** Measures the ratio of edge pixels (detected by the Canny edge detector) to the total number of pixels in the frame.
+- **Keypoints:** Counts the number of keypoints detected using the SIFT algorithm.
+- **FFT Peak:** Extracts the peak value from the Fast Fourier Transform (FFT) of each frame, providing a measure of frequency components.
+
+Each feature is calculated for every frame in the segmented videos, allowing for a detailed analysis of each time slice.
+
+### 3. Output Structure
+
+The extracted features are saved in CSV files for each state (e.g., `Bearing_fault_framewise_features.csv`). Each row in the CSV represents the features of a single frame, with the following columns:
+
+- `video_name`: Name of the video.
+- `frame_index`: Index of the frame in the segment.
+- `mean_flow`: Mean optical flow between consecutive frames.
+- `std_flow`: Standard deviation of optical flow.
+- `edge_ratio`: Ratio of edge pixels to total pixels.
+- `keypoint_count`: Number of keypoints detected.
+- `fft_peak`: Maximum FFT magnitude (peak).
+- `view`: The view (e.g., `front` or `angle`).
+- `state`: The condition of the system (e.g., `Bearing_fault`).
+
+
+### Benefits of Frame-wise Feature Extraction
+
+- **Detailed Temporal Analysis:** Allows fine-grained analysis of vibrations by extracting features for each frame, capturing the dynamics over time.
+- **Comprehensive Data Representation:** The frame-wise features can be used for training machine learning models (e.g., CNNs) to predict system states based on individual frames.
+- **Granular Insights:** Provides detailed insights into the behavior of the system, such as how optical flow, edges, and keypoints evolve within each segment.
+
+This step prepares the dataset for the next stage of model training or analysis, ensuring a comprehensive representation of the video data at the frame level.
+
+---
+
