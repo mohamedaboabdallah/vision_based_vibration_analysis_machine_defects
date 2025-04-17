@@ -1,0 +1,4 @@
+file_path,filename,class,duration,overlap
+Datasets\Bearing_fault\segmented_10\segmented_10_features.csv,segmented_10_features.csv,Bearing_fault,10,False
+Datasets\Normal_state\segmented_10\segmented_10_features.csv,segmented_10_features.csv,Normal_state,10,False
+Datasets\Unbalance_weight\segmented_10\segmented_10_features.csv,segmented_10_features.csv,Unbalance_weight,10,False
