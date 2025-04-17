@@ -193,7 +193,15 @@ Eulerian Video Magnification (EVM) is a technique used to amplify subtle motion 
 - **Action**: The processed frames are converted back to BGR format and written to an output video file.
 - **Function Used**: `cv2.VideoWriter()` is used to create a video file.
 - **Output**: A video where the amplified vibrations or motion are clearly visible.
-
+ 
+### used parameters:
+- **mode** : laplacian
+- **level** : 5
+- **alpha** : 100
+- **freq_range** : 0.1 -2.0
+- **attenuation** : 5
+- **lambda_cutoff** :500
+![Sample Image](evm_comparison.png)
 ## Output
 - The final output is a video where subtle vibrations or changes in the original video are amplified, making them more visible. The output video will be saved in the specified `output_path` in `.mp4` format.
 
