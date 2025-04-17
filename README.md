@@ -296,4 +296,51 @@ The extracted features are saved in CSV files for each state (e.g., `Bearing_fau
 This step prepares the dataset for the next stage of model training or analysis, ensuring a comprehensive representation of the video data at the frame level.
 
 ---
+## Step 7: Creating Duration-Based CSV Files for Each Group
+
+### Overview:
+In this step, we process segmented data from different classes and group them based on their duration and overlap conditions. For each group (5s, 5s_overlap, 10s, 10s_overlap, 15s, 15s_overlap), we concatenate the CSV files from different videos, add metadata, and create separate CSV files for each group.
+
+### Key Operations:
+1. **Scan for Segmented Data:**
+   - The script searches through the segmented data folders for each class, extracting CSV files and grouping them based on the duration (5s, 10s, 15s) and overlap condition (overlap or no overlap).
+
+2. **Metadata Extraction:**
+   - For each CSV file, metadata is added, including the class name, file name, duration, and overlap status.
+
+3. **Concatenate Data:**
+   - For each group (based on duration and overlap), CSV files are read, metadata is appended, and the data is concatenated into a single DataFrame.
+
+4. **Save Final CSV Files:**
+   - The concatenated data is sorted by class and filename and saved into separate CSV files: `5s.csv`, `5s_overlap.csv`, `10s.csv`, `10s_overlap.csv`, `15s.csv`, and `15s_overlap.csv`.
+
+---
+### Overview:
+In this step, we train and evaluate a machine learning model for each of the segmented data groups. The model is built with reduced complexity, increased regularization, dropout, and batch normalization to improve performance and generalization. Additionally, data augmentation and class balancing are applied to further optimize the model's training.
+
+### Key Operations:
+1. **Data Loading and Preprocessing:**
+   - For each group (5s, 5s_overlap, 10s, 10s_overlap, 15s, 15s_overlap), the corresponding CSV is loaded.
+   - Missing columns are checked, and if necessary columns like 'class' or 'view' are encoded.
+   
+2. **Data Augmentation and Feature Normalization:**
+   - Numerical features are normalized using `StandardScaler`.
+   - Data augmentation is applied to introduce noise to the features, enhancing model robustness.
+
+3. **Model Building:**
+   - A neural network is built using Keras, with layers for dense connections, dropout, batch normalization, and L1/L2 regularization.
+   
+4. **Data Splitting:**
+   - The data is split into training, validation, and test sets using an 85/15 split, followed by a 70/15 split for training and validation.
+   
+5. **Model Training:**
+   - The model is trained using the Adam optimizer with a lower initial learning rate and early stopping to prevent overfitting.
+   - `ReduceLROnPlateau` is used to adjust the learning rate dynamically.
+   
+6. **Class Weighting:**
+   - Class weights are computed to address any class imbalance, ensuring that the model does not favor the majority class.
+
+7. **Evaluation and Visualization:**
+   - The model is evaluated on the test set, and performance metrics such as accuracy and loss are stored for each group.
+   - Plots for training and validation loss, as well as accuracy, are displayed to visualize the model’s learning process.
 
