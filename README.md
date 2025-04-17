@@ -315,6 +315,8 @@ In this step, we process segmented data from different classes and group them ba
    - The concatenated data is sorted by class and filename and saved into separate CSV files: `5s.csv`, `5s_overlap.csv`, `10s.csv`, `10s_overlap.csv`, `15s.csv`, and `15s_overlap.csv`.
 
 ---
+
+## Step 8: Training and Evaluation of the Model for Each Group
 ### Overview:
 In this step, we train and evaluate a machine learning model for each of the segmented data groups. The model is built with reduced complexity, increased regularization, dropout, and batch normalization to improve performance and generalization. Additionally, data augmentation and class balancing are applied to further optimize the model's training.
 
