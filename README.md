@@ -417,13 +417,4 @@ The CNN consists of:
 - Final **test accuracy** was **94.37%**, showing strong generalization even with a modest dataset size.
 - The validation and test loss showed that while the model was effective, slight overfitting may still occur due to dataset simplicity.
 
----
 
-## ⚠️ PyTorch Warning (Security)
-
-During model loading, a **FutureWarning** appeared from PyTorch, recommending the use of `weights_only=True` in `torch.load`.  
-This change helps prevent loading arbitrary pickled objects, which can be a security risk.
-
-🟢 Since I fully control the model and training pipeline, it's safe for now, but future compatibility should include this flag for better practice.
-
----
