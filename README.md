@@ -384,9 +384,7 @@ Overall, a 90% training accuracy coupled with a 99% test accuracy, along with re
 
 ## Model Overview
 
-I designed and trained a Convolutional Neural Network (CNN) to classify machine vibration conditions such as **Bearing Fault**, **Unbalanced Weight**, and **Normal State** using grayscale video frames enhanced with Eulerian Video Magnification (EVM).
-
----
+We designed and trained a Convolutional Neural Network (CNN) to classify machine vibration conditions such as **Bearing Fault**, **Unbalanced Weight**, and **Normal State** using grayscale video frames enhanced with Eulerian Video Magnification (EVM).
 
 ## 🏗 Model Architecture
 
