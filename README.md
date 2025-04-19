@@ -377,3 +377,55 @@ A **90% training accuracy** coupled with a **99% test accuracy** is generally co
 ## Conclusion:
 
 Overall, a 90% training accuracy coupled with a 99% test accuracy, along with regularization techniques, suggests that your model is robust and performs well on unseen data. However, it's crucial to verify that the data is representative and there are no issues like data leakage or preprocessing inconsistencies.
+
+---
+---
+# Vibration Classification using CNN
+
+## Model Overview
+
+I designed and trained a Convolutional Neural Network (CNN) to classify machine vibration conditions such as **Bearing Fault**, **Unbalanced Weight**, and **Normal State** using grayscale video frames enhanced with Eulerian Video Magnification (EVM).
+
+---
+
+## 🏗 Model Architecture
+
+The CNN consists of:
+- Three convolutional layers with increasing channel depths (8 → 16 → 32), each followed by batch normalization, ReLU activation, and max pooling to downsample.
+- A fully connected classifier with dropout for regularization, ensuring the model doesn't overfit to the small dataset.
+
+---
+
+## ⚙️ Training Setup
+
+- **Loss Function:** CrossEntropyLoss with label smoothing and class weights to handle imbalanced data.
+- **Optimizer:** Adam with L2 regularization (weight decay) for generalization.
+- **Scheduler:** Step learning rate scheduler to reduce the learning rate periodically and stabilize learning.
+- **Early Stopping:** Implemented to stop training if the validation loss doesn't improve after 7 consecutive epochs.
+
+---
+
+## 🧪 Dataset Details
+
+- The dataset includes **8454 video frames**, extracted from synchronized recordings of different machine states.
+- The frames were split into training, validation, and test sets.
+- Data augmentation techniques were applied to increase robustness and reduce overfitting.
+
+---
+
+## 📈 Performance Summary
+
+- The model quickly reached high training and validation accuracy due to the relatively small and clean dataset.
+- Final **test accuracy** was **94.37%**, showing strong generalization even with a modest dataset size.
+- The validation and test loss showed that while the model was effective, slight overfitting may still occur due to dataset simplicity.
+
+---
+
+## ⚠️ PyTorch Warning (Security)
+
+During model loading, a **FutureWarning** appeared from PyTorch, recommending the use of `weights_only=True` in `torch.load`.  
+This change helps prevent loading arbitrary pickled objects, which can be a security risk.
+
+🟢 Since I fully control the model and training pipeline, it's safe for now, but future compatibility should include this flag for better practice.
+
+---
